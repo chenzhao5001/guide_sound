@@ -12,11 +12,35 @@
         WHERE id = #{userId}
     </select>
 
+    <insert id="insertUser" parameterType="com.guidesound.models.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user
+        (
+        unionid,
+        name,
+        type,
+        status,
+        follow_num,
+        funs_num,
+        sign_name,
+        sex,
+        teach_age,
+        create_time,
+        update_time
+        )
+        VALUES(
+        #{unionid},
+        #{name},
+        #{type},
+        #{status},
+        #{follow_num},
+        #{funs_num},
 
-    <insert id="insertUser" parameterType="com.guidesound.models.User">
-        INSERT INTO user(name,
-        dept, website,phone)
-        VALUES(#{name}, #{dept}, #{website}, #{phone})
+        #{sign_name},
+        #{sex},
+        #{teach_age},
+        #{create_time},
+        #{update_time}
+        )
     </insert>
 
     <select id="getUserList" resultType="com.guidesound.models.User">
@@ -39,5 +63,9 @@
     <delete id="deleteUser" parameterType="int">
         DELETE FROM user WHERE id = #{id}
     </delete>
+
+    <select id="getListByUnionid" resultType="com.guidesound.models.User" parameterType="string">
+        select * from user where unionid = #{unionid}
+    </select>
 
 </mapper>

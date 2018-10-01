@@ -14,5 +14,7 @@ public interface IUser {
     public void deleteUser(int userId);
 
     public User getUser(int id);
+
+    public List<User> getListByUnionid(String unionid);
 }
 

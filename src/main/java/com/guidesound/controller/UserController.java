@@ -33,22 +33,22 @@ public class UserController {
 
     /**
      * 用户登录
-     * @return
+     * @param
+     * @return 登录结果
      */
     @RequestMapping(value = "/login",method = RequestMethod.GET)
-    public  @ResponseBody ServiceResponse login(String unionid) {
-        System.out.println(123);
+    public  @ResponseBody ServiceResponse login(String unionid,String name) {
         ServiceResponse rep = new ServiceResponse();
-//        if (unionid == null) {
-//            rep.setCode(201);
-//            rep.setMsg("缺少参数");
-//            return rep;
-//        }
-        User user = userService.getUserById(1);
-        System.out.println(user);
+        if (unionid == null || name == null) {
+            rep.setCode(201);
+            rep.setMsg("缺少参数");
+            return rep;
+        }
 
-
-        return null;
+        int user_id = userService.login(unionid,name);
+        rep.setCode(user_id);
+        rep.setMsg("登录成功");
+        return rep;
     }
 
     /**

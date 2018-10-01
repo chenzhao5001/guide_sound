@@ -14,6 +14,8 @@ public class User {
     private String sign_name;
     private int sex;
     private int teach_age;
+    private int create_time;
+    private int update_time;
 
 
     public int getId() {
@@ -96,6 +98,22 @@ public class User {
         this.teach_age = teach_age;
     }
 
+    public int getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(int create_time) {
+        this.create_time = create_time;
+    }
+
+    public int getUpdate_time() {
+        return update_time;
+    }
+
+    public void setUpdate_time(int update_time) {
+        this.update_time = update_time;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -109,6 +127,8 @@ public class User {
                 ", sign_name='" + sign_name + '\'' +
                 ", sex=" + sex +
                 ", teach_age=" + teach_age +
+                ", create_time=" + create_time +
+                ", update_time=" + update_time +
                 '}';
     }
 }
