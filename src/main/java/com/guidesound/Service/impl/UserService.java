@@ -2,7 +2,9 @@ package com.guidesound.Service.impl;
 
 import com.guidesound.Service.IUserService;
 import com.guidesound.dao.IUser;
+import com.guidesound.dao.IUserFuns;
 import com.guidesound.models.User;
+import com.guidesound.models.UserFuns;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ public class UserService implements IUserService {
 
     @Autowired
     private IUser user;
+    @Autowired
+    private IUserFuns iUserFuns;
 
     @Override
     public User getUserById(int userId) {
@@ -40,6 +44,17 @@ public class UserService implements IUserService {
     @Override
     public void deleteUser(int id) {
 
+    }
+
+    @Override
+    public void addFuns(int userId,int funsId) {
+        UserFuns  userFuns = new UserFuns();
+        userFuns.setUser_id(userId);
+        userFuns.setFuns_user_id(funsId);
+        userFuns.setDeleted(0);
+        userFuns.setCreate_time((int) (new Date().getTime() / 1000));
+        userFuns.setUpdate_time((int) (new Date().getTime() / 1000));
+        iUserFuns.addUserFuns(userFuns);
     }
 
     @Override
