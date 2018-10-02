@@ -16,11 +16,12 @@ public class BaseController {
     private IUserService userService;
 
     @ModelAttribute
-    public void common(HttpServletRequest request, HttpServletResponse response) {
-        String token = request.getParameter("token");
-        if(token != null) {
-            int user_id = TockenUtil.getUserIdByTocket(token);
-            currentUser = userService.getUserById(user_id);
-        }
+    public boolean common(HttpServletRequest request, HttpServletResponse response) {
+//        String token = request.getParameter("token");
+//        if(token != null) {
+//            int user_id = TockenUtil.getUserIdByTocket(token);
+//            currentUser = userService.getUserById(user_id);
+//        }
+        return false;
     }
 }

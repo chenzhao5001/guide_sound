@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 //import org.mybatis.spring.mapper.MapperFactoryBean;
 
@@ -58,11 +60,14 @@ public class UserController extends BaseController{
      * @return
      */
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
-    public  @ResponseBody ServiceResponse logout() {
+    public  @ResponseBody ServiceResponse logout(HttpServletRequest request, HttpServletResponse response) {
         ServiceResponse rep = new ServiceResponse();
         System.out.println(currentUser);
         rep.setCode(200);
-        rep.setMsg("用户推出成功");
+        rep.setMsg("用户退出");
+//        System.out.println(123);
+//        User user = (User)request.getAttribute("user_info");
+//        System.out.println(user);
         return rep;
     }
 
