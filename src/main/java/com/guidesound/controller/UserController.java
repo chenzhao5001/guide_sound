@@ -3,6 +3,7 @@ package com.guidesound.controller;
 import com.guidesound.Service.IUserService;
 import com.guidesound.models.User;
 import com.guidesound.util.ServiceResponse;
+import com.guidesound.util.TockenUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,7 +19,7 @@ import javax.annotation.Resource;
  */
 @Controller
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends BaseController{
 
     @Resource
     private IUserService userService;
@@ -44,10 +45,11 @@ public class UserController {
             rep.setMsg("缺少参数");
             return rep;
         }
-
         int user_id = userService.login(unionid,name);
+        String token = TockenUtil.makeTocken(user_id);
         rep.setCode(user_id);
         rep.setMsg("登录成功");
+        rep.setData(token);
         return rep;
     }
 
@@ -57,7 +59,11 @@ public class UserController {
      */
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
     public  @ResponseBody ServiceResponse logout() {
-        return null;
+        ServiceResponse rep = new ServiceResponse();
+        System.out.println(currentUser);
+        rep.setCode(200);
+        rep.setMsg("用户推出成功");
+        return rep;
     }
 
 }

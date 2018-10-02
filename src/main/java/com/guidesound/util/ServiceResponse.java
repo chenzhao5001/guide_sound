@@ -7,6 +7,7 @@ public class ServiceResponse {
 
     public int code;
     public String msg;
+    public String data;
 
     public int getCode() {
         return code;
@@ -22,6 +23,14 @@ public class ServiceResponse {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 
     @Override
