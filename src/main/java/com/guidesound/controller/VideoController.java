@@ -11,7 +11,10 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * 视频控制器
@@ -21,36 +24,36 @@ import java.util.Iterator;
 @RequestMapping("/video")
 public class VideoController extends BaseController{
 
+    /**
+     * 视频上传
+     */
     @RequestMapping(value = "/add")
     public @ResponseBody ServiceResponse addVideo(HttpServletRequest request) throws IOException {
 
-        System.out.println(111);
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        String title = multipartRequest.getParameter("title");
+        String subject = multipartRequest.getParameter("subject");
+        String watch_type = multipartRequest.getParameter("watch_type");
+        MultipartFile picture = multipartRequest.getFile("picture");
+        MultipartFile content = multipartRequest.getFile("content");
 
-        //将当前上下文初始化给  CommonsMutipartResolver （多部分解析器）
-        CommonsMultipartResolver multipartResolver=new CommonsMultipartResolver(
-                request.getSession().getServletContext());
-        //检查form中是否有enctype="multipart/form-data"
-        if(multipartResolver.isMultipart(request))
-        {
-            //将request变成多部分request
-            MultipartHttpServletRequest multiRequest=(MultipartHttpServletRequest)request;
-            //获取multiRequest 中所有的文件名
-            Iterator iter=multiRequest.getFileNames();
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss_");//设置日期格式
+        String strDate = df.format(new Date());// new Date()为获取当前系统时间
 
-            while(iter.hasNext())
-            {
-                //一次遍历所有文件
-                MultipartFile file=multiRequest.getFile(iter.next().toString());
-                if(file!=null)
-                {
-                    String path="E:/springUpload"+file.getOriginalFilename();
-                    //上传
-                    file.transferTo(new File(path));
-                }
-
-            }
-
+        String savePath = multipartRequest.getServletContext().getRealPath("/up_video");
+        System.out.println(savePath);
+        File filePath =new File(savePath);
+        if  (!filePath .exists()  && !filePath .isDirectory()) {
+            filePath .mkdir();
         }
+        String pathPic = savePath + "/"+ strDate + picture.getOriginalFilename();
+        String pathCon = savePath + "/"+ strDate + content.getOriginalFilename();
+        System.out.println(pathPic);
+        System.out.println(pathCon);
+        //上传
+        picture.transferTo(new File(pathPic));
+        content.transferTo(new File(pathCon));
+
 
         ServiceResponse rsp = new ServiceResponse();
         rsp.msg = "ass";
