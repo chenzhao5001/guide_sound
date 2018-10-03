@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 视频控制器
@@ -114,5 +115,135 @@ public class VideoController extends BaseController {
         rsp.msg = "新增视频完成";
         rsp.code = 200;
         return rsp;
+    }
+
+
+
+    /**
+     *获取用户上传视频列表
+     */
+    @RequestMapping(value = "/get_list")
+    public @ResponseBody RepList  getVideoList(HttpServletRequest request) {
+        String userId = request.getParameter("user_id");
+        RepList rep = new RepList();
+        if (userId == null) {
+            rep.setMsg("缺少参数");
+            rep.code = 201;
+            return rep;
+        }
+
+        List<Video> list = videoService.getVideoList(Integer.parseInt(userId));
+        rep.setCode(200);
+        rep.setMsg("OK");
+        rep.setList(list);
+        return rep;
+    }
+
+    @RequestMapping(value = "/get_info")
+    public @ResponseBody RepVideo  getVideo(HttpServletRequest request) {
+        String id = request.getParameter("id");
+        RepVideo rsp = new RepVideo();
+        if(id == null) {
+            rsp.msg = "缺少视频id参数";
+            rsp.code = 201;
+            return rsp;
+        }
+        Video video = videoService.getVideo(Integer.parseInt(id));
+        rsp.code = 200;
+        rsp.msg = "ok";
+        rsp.video = video;
+        return rsp;
+    }
+
+    @RequestMapping(value = "/set_status")
+    public @ResponseBody ServiceResponse setVideoStatus(HttpServletRequest request) {
+        String id = request.getParameter("id");
+        String status = request.getParameter("status");
+        ServiceResponse rsp = new ServiceResponse();
+        if(id == null || status == null) {
+            rsp.msg = "缺少参数";
+            rsp.code = 204;
+            return rsp;
+        }
+        videoService.setVideoStatus(Integer.parseInt(id),Integer.parseInt(status));
+        rsp.msg = "OK";
+        rsp.code = 200;
+        return rsp;
+    }
+
+    @RequestMapping(value = "/delete")
+    public @ResponseBody ServiceResponse delete(HttpServletRequest request) {
+        String id = request.getParameter("id");
+        ServiceResponse rsp = new ServiceResponse();
+        if(id == null) {
+            rsp.msg = "缺少视频id参数";
+            rsp.code = 203;
+            return rsp;
+        }
+        User user = (User)request.getAttribute("user_info");
+        videoService.deleteVideo(Integer.parseInt(id),user.getId());
+        rsp.msg = "OK";
+        rsp.code = 200;
+        return rsp;
+    }
+}
+
+class RepList {
+    int code;
+    String msg;
+    List<Video> list;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public List<Video> getList() {
+        return list;
+    }
+
+    public void setList(List<Video> list) {
+        this.list = list;
+    }
+}
+
+class RepVideo {
+    int code;
+    String msg;
+    Video video;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public Video getVideo() {
+        return video;
+    }
+
+    public void setVideo(Video video) {
+        this.video = video;
     }
 }

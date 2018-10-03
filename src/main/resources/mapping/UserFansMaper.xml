@@ -30,12 +30,12 @@
     </insert>
 
     <delete id="deleteUserFuns">
-        DELETE FROM userFuns WHERE userId = #{0} and funsId = #{1}
+        DELETE FROM user WHERE userId = #{0} and funsId = #{1}
     </delete>
 
     <select id="getUserFunsInfo" resultType="com.guidesound.models.UserFuns">
         SELECT *
-        FROM userFuns
+        FROM user
         WHERE userId = #{0} and funsId = #{1}
     </select>
 
