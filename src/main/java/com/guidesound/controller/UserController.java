@@ -6,15 +6,11 @@ import com.guidesound.util.ServiceResponse;
 import com.guidesound.util.TockenUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-//import org.mybatis.spring.mapper.MapperFactoryBean;
-
 
 /**
  * 用户控制器
@@ -26,8 +22,9 @@ public class UserController extends BaseController{
     @Resource
     private IUserService userService;
 
-    @RequestMapping(value = "/add",method = RequestMethod.GET)
-    public @ResponseBody ServiceResponse createUser() {
+    @RequestMapping(value = "/add")
+    public @ResponseBody ServiceResponse createUser(HttpServletResponse response) {
+
         ServiceResponse rsp = new ServiceResponse();
         rsp.msg = "ass";
         rsp.code = 123;
@@ -39,8 +36,12 @@ public class UserController extends BaseController{
      * @param
      * @return 登录结果
      */
-    @RequestMapping(value = "/login",method = RequestMethod.GET)
-    public  @ResponseBody ServiceResponse login(String unionid,String name) {
+
+    @RequestMapping(value = "/login")
+    public  @ResponseBody ServiceResponse login(HttpServletRequest request, HttpServletResponse response) {
+        String unionid = request.getParameter("unionid");
+        String name = request.getParameter("name");
+
         ServiceResponse rep = new ServiceResponse();
         if (unionid == null || name == null) {
             rep.setCode(201);
@@ -65,12 +66,13 @@ public class UserController extends BaseController{
         System.out.println(currentUser);
         rep.setCode(200);
         rep.setMsg("用户退出");
-//        System.out.println(123);
-//        User user = (User)request.getAttribute("user_info");
-//        System.out.println(user);
         return rep;
     }
 
+    /**
+     * 增加用户粉丝
+     * @return
+     */
     @RequestMapping(value = "/addfuns")
     public @ResponseBody ServiceResponse addFuns(HttpServletRequest request) {
         User user = (User)request.getAttribute("user_info");
@@ -86,7 +88,58 @@ public class UserController extends BaseController{
         rep.setCode(200);
         rep.setMsg("增加funs成功");
         return rep;
-
     }
+
+    /**
+     * 获取粉丝数目
+     *
+     */
+
+    @RequestMapping(value = "/getfuns")
+    public @ResponseBody ServiceResponse getUserFunsNum(HttpServletRequest request) {
+        User user = (User)request.getAttribute("user_info");
+        String funsIdTemp = request.getParameter("funs_id");
+        ServiceResponse rep = new ServiceResponse();
+        if(funsIdTemp == null) {
+            rep.setCode(201);
+            rep.setMsg("缺少参数");
+            return rep;
+        }
+        int funsId = Integer.parseInt(funsIdTemp);
+        int num = userService.getFunsNum(funsId);
+
+        rep.setCode(200);
+        rep.setMsg("增加funs成功");
+        rep.setData(String.valueOf(num));
+        return rep;
+    }
+
+    /**
+     *删除对某人的粉丝
+     */
+    @RequestMapping(value = "/deletefuns")
+    public @ResponseBody ServiceResponse deleteUserFuns(HttpServletRequest request) {
+        User user = (User)request.getAttribute("user_info");
+        String funsIdTemp = request.getParameter("funs_id");
+        ServiceResponse rep = new ServiceResponse();
+        if(funsIdTemp == null) {
+            rep.setCode(201);
+            rep.setMsg("缺少参数");
+            return rep;
+        }
+
+        int funsId = Integer.parseInt(funsIdTemp);
+        userService.deleteFuns(user.getId(),funsId);
+        rep.setCode(200);
+        rep.setMsg("增加funs成功");
+        return rep;
+    }
+
+    /**
+     *获取关注数目
+     */
+//    public int getUserFollow(HttpServletRequest request) {
+//
+//    }
 
 }

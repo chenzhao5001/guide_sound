@@ -80,4 +80,13 @@ public class UserService implements IUserService {
         return userList.get(0).getId();
     }
 
+    @Override
+    public int getFunsNum(int userId) {
+        return 0;
+    }
+
+    @Override
+    public void deleteFuns(int userId, int funsUserId) {
+
+    }
 }

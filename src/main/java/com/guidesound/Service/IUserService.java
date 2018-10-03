@@ -15,4 +15,6 @@ public interface IUserService {
 
     public int login(String uuid,String name);
     public void addFuns(int userId,int funsUserId);
+    public int getFunsNum(int userId);
+    public void deleteFuns(int userId,int funsUserId);
 }

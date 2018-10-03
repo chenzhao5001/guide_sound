@@ -9,6 +9,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
@@ -21,32 +22,39 @@ public class Common implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println("preHandle");
-        String token = request.getParameter("token");
-        if(token == null) {
-            response.setContentType("text/json; charset=utf-8");
-            PrintWriter out = response.getWriter();
-            JSONObject jsonobj = new JSONObject();
-            jsonobj.put("code", 202);
-            jsonobj.put("msg", "token错误");
-            out = response.getWriter();
-            out.println(jsonobj);
-            return false;
+
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                System.out.println(cookie);
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    int user_id = TockenUtil.getUserIdByTocket(token);
+                    User user = userService.getUserById(user_id);
+                    if(user == null) {
+                        response.setContentType("text/json; charset=utf-8");
+                        PrintWriter out = response.getWriter();
+                        JSONObject jsonobj = new JSONObject();
+                        jsonobj.put("code", 203);
+                        jsonobj.put("msg", "token错误");
+                        out = response.getWriter();
+                        out.println(jsonobj);
+                        return false;
+                    }
+                    request.setAttribute("user_info",user);
+                    return true;
+                }
+            }
         }
-        int user_id = TockenUtil.getUserIdByTocket(token);
-        User user = userService.getUserById(user_id);
-        if(user == null) {
-            response.setContentType("text/json; charset=utf-8");
-            PrintWriter out = response.getWriter();
-            JSONObject jsonobj = new JSONObject();
-            jsonobj.put("code", 203);
-            jsonobj.put("msg", "缺少token");
-            out = response.getWriter();
-            out.println(jsonobj);
-            return false;
-        }
-        request.setAttribute("user_info",user);
-        return true;
+
+        response.setContentType("text/json; charset=utf-8");
+        PrintWriter out = response.getWriter();
+        JSONObject jsonobj = new JSONObject();
+        jsonobj.put("code", 202);
+        jsonobj.put("msg", "缺少token");
+        out = response.getWriter();
+        out.println(jsonobj);
+        return false;
     }
 
     @Override
