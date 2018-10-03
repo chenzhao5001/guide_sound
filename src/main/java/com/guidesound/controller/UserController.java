@@ -4,11 +4,10 @@ import com.guidesound.Service.IUserService;
 import com.guidesound.models.User;
 import com.guidesound.util.ServiceResponse;
 import com.guidesound.util.TockenUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/user")
 public class UserController extends BaseController{
 
-    @Resource
+    @Autowired
     private IUserService userService;
 
     @RequestMapping(value = "/add")
@@ -39,6 +38,8 @@ public class UserController extends BaseController{
 
     @RequestMapping(value = "/login")
     public  @ResponseBody ServiceResponse login(HttpServletRequest request, HttpServletResponse response) {
+
+
         String unionid = request.getParameter("unionid");
         String name = request.getParameter("name");
 
@@ -48,10 +49,13 @@ public class UserController extends BaseController{
             rep.setMsg("缺少参数");
             return rep;
         }
+
+        String temp1 = request.getServletContext().getRealPath("/");
+        String temp2 = request.getServletContext().getRealPath("../");
         int user_id = userService.login(unionid,name);
         String token = TockenUtil.makeTocken(user_id);
         rep.setCode(200);
-        rep.setMsg("登录成功");
+        rep.setMsg(temp1+ "  " + temp2);
         rep.setData(token);
         return rep;
     }
