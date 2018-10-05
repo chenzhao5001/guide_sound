@@ -12,9 +12,17 @@ public interface IUserService {
     public User updateUser(User user);
     public void deleteUser(int id);
 
+    public User login(String uuid,String name,String head);
+    public List<User> phoneLogin(String phone);
+    public void phoneRegister(int id,String phone,String pwd);
 
-    public int login(String uuid,String name);
-    public void addFuns(int userId,int funsUserId);
-    public int getFunsNum(int userId);
-    public void deleteFuns(int userId,int funsUserId);
+
+    /**
+     * user_id (被关注人id)  follow_user_id(关注人id)
+     */
+    int getFunsCount(int user_id);
+    int getFollowCount(int follow_user_id);
+    void cannelFollow(int user_id,int follow_user_id);
+    void followUser(int user_id,int follow_user_id);
+
 }

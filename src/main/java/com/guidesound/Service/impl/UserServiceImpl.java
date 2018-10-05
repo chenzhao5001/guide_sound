@@ -2,13 +2,11 @@ package com.guidesound.Service.impl;
 
 import com.guidesound.Service.IUserService;
 import com.guidesound.dao.IUser;
+import com.guidesound.dao.IUserFollow;
 import com.guidesound.dao.IUserFuns;
 import com.guidesound.models.User;
-import com.guidesound.models.UserFuns;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +18,8 @@ public class UserServiceImpl implements IUserService {
     private IUser user;
     @Autowired
     private IUserFuns iUserFuns;
+    @Autowired
+    private IUserFollow iUserFollow;
 
     @Override
     public User getUserById(int userId) {
@@ -47,24 +47,15 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void addFuns(int userId,int funsId) {
-        UserFuns  userFuns = new UserFuns();
-        userFuns.setUser_id(userId);
-        userFuns.setFuns_user_id(funsId);
-        userFuns.setDeleted(0);
-        userFuns.setCreate_time((int) (new Date().getTime() / 1000));
-        userFuns.setUpdate_time((int) (new Date().getTime() / 1000));
-        iUserFuns.addUserFuns(userFuns);
-    }
-
-    @Override
-    public int login(String uuid,String name) {
+    public User login(String uuid,String name,String head) {
         List<User> userList = this.user.getListByUnionid(uuid);
-        System.out.println(userList);
-        if(null == userList || userList.size() ==0 ){
+        if(null == userList || userList.size() == 0 ){
             User u_temp = new User();
             u_temp.setUnionid(uuid);
             u_temp.setName(name);
+            u_temp.setHead(head);
+            u_temp.setPhone("");
+            u_temp.setPwd("");
             u_temp.setType(0);
             u_temp.setStatus(0);
             u_temp.setFollow_num(0);
@@ -75,18 +66,41 @@ public class UserServiceImpl implements IUserService {
             u_temp.setCreate_time((int) (new Date().getTime() / 1000));
             u_temp.setUpdate_time((int) (new Date().getTime() / 1000));
             this.user.insertUser(u_temp);
-            return u_temp.getId();
+            return u_temp;
         }
-        return userList.get(0).getId();
+        return userList.get(0);
     }
 
     @Override
-    public int getFunsNum(int userId) {
-        return 0;
+    public List<User> phoneLogin(String phone) {
+        return user.getUserByPhone(phone);
     }
 
     @Override
-    public void deleteFuns(int userId, int funsUserId) {
+    public int getFunsCount(int user_id) {
+        return iUserFollow.getFunsCount(user_id);
+    }
 
+    @Override
+    public int getFollowCount(int follow_user_id) {
+        return iUserFollow.getFollowCount(follow_user_id);
+    }
+
+
+    @Override
+    public void cannelFollow(int user_id, int follow_user_id) {
+        iUserFollow.cannelFollow(user_id,follow_user_id);
+    }
+
+    @Override
+    public void followUser(int user_id, int follow_user_id) {
+        if(iUserFollow.getFollowInfo(user_id,follow_user_id) <= 0) {
+            iUserFollow.followUser(user_id,follow_user_id);
+        }
+    }
+
+    @Override
+    public void phoneRegister(int id,String phone, String pwd) {
+        user.phoneRegister(id,phone,pwd);
     }
 }

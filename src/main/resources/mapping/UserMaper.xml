@@ -17,6 +17,9 @@
         (
         unionid,
         name,
+        head,
+        phone,
+        pwd,
         type,
         status,
         follow_num,
@@ -30,6 +33,9 @@
         VALUES(
         #{unionid},
         #{name},
+        #{head},
+        #{phone},
+        #{pwd},
         #{type},
         #{status},
         #{follow_num},

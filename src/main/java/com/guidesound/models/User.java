@@ -6,7 +6,10 @@ package com.guidesound.models;
 public class User {
     private int id;
     private String unionid;
+    private String phone;
+    private String pwd;
     private String name;
+    private String head;
     private int type;
     private int status;
     private int follow_num;
@@ -34,12 +37,36 @@ public class User {
         this.unionid = unionid;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getHead() {
+        return head;
+    }
+
+    public void setHead(String head) {
+        this.head = head;
     }
 
     public int getType() {

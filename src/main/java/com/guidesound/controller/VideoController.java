@@ -94,13 +94,13 @@ public class VideoController extends BaseController {
         System.out.println(123);
         String showPicPath = "http://" + request.getServerName()
                 + ":"+ request.getServerPort()
-                + multipartRequest.getContextPath()
+//                + multipartRequest.getContextPath()
                 + "/upload"
                 + "/" + strDate
                 + picture.getOriginalFilename();
         String videoPicPath = "http://" + request.getServerName()
                 + ":"+ request.getServerPort()
-                + multipartRequest.getContextPath()
+//                + multipartRequest.getContextPath()
                 + "/upload"
                 + "/" + strDate
                 + viedo.getOriginalFilename();
@@ -114,6 +114,7 @@ public class VideoController extends BaseController {
         ServiceResponse rsp = new ServiceResponse();
         rsp.msg = "新增视频完成";
         rsp.code = 200;
+        rsp.data = savePath;
         return rsp;
     }
 
