@@ -25,6 +25,11 @@ public interface IUser {
     @Update("update user set phone = #{arg1},pwd = #{arg2} ,status = 1 where id = #{arg0}")
     public void phoneRegister(int id,String phone,String pwd);
 
+    @Update("update user set status = #{arg1} where id= #{arg0}")
+    public void updateStatus(int id,int status);
+    @Update("update user set type = #{arg1} where id= #{arg0}")
+    public void updateType(int id,int type);
+
 
 
 
