@@ -1,12 +1,14 @@
 package com.guidesound.controller;
 
 import com.guidesound.Service.IVideoService;
+import com.guidesound.dao.IVideo;
 import com.guidesound.models.User;
 import com.guidesound.models.Video;
 import com.guidesound.util.ServiceResponse;
 import com.sun.xml.internal.ws.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +31,9 @@ public class VideoController extends BaseController {
 
     @Autowired
     private IVideoService videoService;
+
+    @Autowired
+    private IVideo iVideo;
 
     /**
      * 视频上传
@@ -186,6 +191,23 @@ public class VideoController extends BaseController {
         rsp.msg = "OK";
         rsp.code = 200;
         return rsp;
+    }
+
+    @RequestMapping(value = "/verify_list")
+    public @ResponseBody RepList   selectNotVerifyVideo() {
+        List<Video> list = iVideo.selectNotVerifyVideo();
+        RepList repList = new RepList();
+        repList.setCode(200);
+        repList.setMsg("ok");
+        repList.setList(list);
+        return repList;
+    }
+
+    @RequestMapping(value = "/verify")
+    public String verify(ModelMap model) {
+        RepList repList = selectNotVerifyVideo();
+        model.addAttribute("video_list",repList.getList());
+        return "verify";
     }
 }
 

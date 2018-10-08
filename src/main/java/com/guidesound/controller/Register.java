@@ -62,7 +62,9 @@ public class Register extends BaseController {
         student.setUpdate_time((int) (new Date().getTime() / 1000));
         iStudent.add(student);
 
-        return null;
+        serviceResponse.setCode(200);
+        serviceResponse.setMsg("ok");
+        return serviceResponse;
     }
 
     @RequestMapping(value = "/teacher")
@@ -97,7 +99,9 @@ public class Register extends BaseController {
         teacher.setUpdate_time((int) (new Date().getTime() / 1000));
         iTeacher.add(teacher);
 
-        return null;
+        serviceResponse.setCode(200);
+        serviceResponse.setMsg("ok");
+        return serviceResponse;
     }
 
     @RequestMapping(value = "/parent")

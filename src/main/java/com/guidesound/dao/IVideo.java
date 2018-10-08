@@ -1,6 +1,7 @@
 package com.guidesound.dao;
 
 import com.guidesound.models.Video;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
@@ -14,4 +15,7 @@ public interface IVideo {
     void setVideoStatus(int id,int status);
     @Update("update video set deleted=1 where id=#{arg0} and user_id=#{arg1}")
     void deleteVideo(int id,int userId);
+
+    @Select("select * from video where examine_status = 0")
+    List<Video> selectNotVerifyVideo();
 }
