@@ -9,6 +9,8 @@ public class Video {
     String content;
     String pic_up_path;
     String video_up_path;
+    String video_temp_path;
+    String video_show_path;
     int create_time;
     int update_time;
 
@@ -74,6 +76,22 @@ public class Video {
 
     public void setVideo_up_path(String video_up_path) {
         this.video_up_path = video_up_path;
+    }
+
+    public String getVideo_temp_path() {
+        return video_temp_path;
+    }
+
+    public void setVideo_temp_path(String video_temp_path) {
+        this.video_temp_path = video_temp_path;
+    }
+
+    public String getVideo_show_path() {
+        return video_show_path;
+    }
+
+    public void setVideo_show_path(String video_show_path) {
+        this.video_show_path = video_show_path;
     }
 
     public int getCreate_time() {

@@ -3,6 +3,8 @@ package com.guidesound.controller;
 import com.guidesound.Service.IUserService;
 import com.guidesound.models.User;
 import com.guidesound.util.TockenUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.annotation.Resource;
@@ -14,14 +16,12 @@ public class BaseController {
     protected User currentUser;
     @Resource
     private IUserService userService;
-
+    static Logger log;
     @ModelAttribute
-    public boolean common(HttpServletRequest request, HttpServletResponse response) {
-//        String token = request.getParameter("token");
-//        if(token != null) {
-//            int user_id = TockenUtil.getUserIdByTocket(token);
-//            currentUser = userService.getUserById(user_id);
-//        }
-        return false;
+    public void common(HttpServletRequest request, HttpServletResponse response) {
+        if(log == null ) {
+            log = (Logger) LogManager.getLogger();
+        }
+        log.info(123);
     }
 }

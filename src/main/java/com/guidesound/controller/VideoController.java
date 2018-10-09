@@ -5,6 +5,7 @@ import com.guidesound.dao.IVideo;
 import com.guidesound.models.User;
 import com.guidesound.models.Video;
 import com.guidesound.util.ServiceResponse;
+import com.guidesound.util.ToolsFunction;
 import com.sun.xml.internal.ws.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -80,12 +81,12 @@ public class VideoController extends BaseController {
             filePath.mkdir();
         }
         String pathPic = savePath + "/" + strDate + picture.getOriginalFilename();
-        String pathCon = savePath + "/" + strDate + viedo.getOriginalFilename();
+        String pathVideo = savePath + "/" + strDate + viedo.getOriginalFilename();
         System.out.println(pathPic);
-        System.out.println(pathCon);
+        System.out.println(pathVideo);
         //上传
         picture.transferTo(new File(pathPic));
-        viedo.transferTo(new File(pathCon));
+        viedo.transferTo(new File(pathVideo));
 
         Video video = new Video();
         User user = (User)multipartRequest.getAttribute("user_info");
@@ -112,6 +113,7 @@ public class VideoController extends BaseController {
                 + viedo.getOriginalFilename();
         video.setPic_up_path(showPicPath);
         video.setVideo_up_path(videoPicPath);
+        video.setVideo_temp_path(pathVideo);
 
         video.setCreate_time((int) (new Date().getTime() / 1000));
         video.setUpdate_time((int) (new Date().getTime() / 1000));
@@ -173,6 +175,36 @@ public class VideoController extends BaseController {
             rsp.code = 204;
             return rsp;
         }
+
+        if(status.equals("1")) {
+            String savePath = request.getServletContext().getRealPath("");
+            System.out.println(savePath);
+            File file = new File(savePath);
+            savePath = file.getParent() + "/video_show/";
+
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss_");
+            String videoName = df.format(new Date()) + java.util.UUID.randomUUID().toString() + ".mp4";
+            Video video = iVideo.getVideo(Integer.parseInt(id));
+            try {
+                log.info("/home/ubuntu/wu/dyFFmpeg "
+                        + video.getVideo_temp_path() + " " + savePath + videoName);
+
+                ToolsFunction.exec("/home/ubuntu/wu/dyFFmpeg "
+                        + video.getVideo_temp_path() + " " + savePath + videoName);
+
+                String videoShowPath = "http://" + request.getServerName()
+                        + ":"+ request.getServerPort()
+                        + "/video_show/"
+                        + videoName;
+                iVideo.setVideoShowPath(Integer.parseInt(id),videoShowPath);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                rsp.msg = "视频转存失败";
+                rsp.code = 202;
+                return rsp;
+            }
+        }
+
         videoService.setVideoStatus(Integer.parseInt(id),Integer.parseInt(status));
         rsp.msg = "OK";
         rsp.code = 200;
@@ -196,18 +228,22 @@ public class VideoController extends BaseController {
     }
 
     @RequestMapping(value = "/verify_list")
-    public @ResponseBody RepList   selectNotVerifyVideo() {
-        List<Video> list = iVideo.selectNotVerifyVideo();
+    public @ResponseBody RepList   selectVideo(String status) {
         RepList repList = new RepList();
+        if(status == null) {
+            status = "0";
+        }
+        List<Video> list = iVideo.selectVideo(Integer.parseInt(status));
         repList.setCode(200);
         repList.setMsg("ok");
         repList.setList(list);
         return repList;
     }
 
+
     @RequestMapping(value = "/verify")
     public String verify(ModelMap model) {
-        RepList repList = selectNotVerifyVideo();
+        RepList repList = selectVideo("0");
         model.addAttribute("video_list",repList.getList());
         return "verify";
     }

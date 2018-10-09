@@ -15,7 +15,7 @@
 <body>
 
 <div id="popup" style="position:absolute;z-index:100; display:none; background-color:#fff;">
-    <video src="http://139.199.123.168:80/upload/20181009_020907_3.mp4" controls="controls">
+    <video id ="video_sign" src="" controls="controls">
         您的浏览器不支持 video 标签。
     </video>
     <br>
@@ -37,7 +37,8 @@
                 if (temp != null && temp.size() > 0) {
                     for (Video video : temp) {%>
             <div class="course-card-container">
-                <a href="JavaScript:void(0)" class="open_window" video_id="<% out.print(video.getId());%>">
+                <a href="JavaScript:void(0)" class="open_window" video_id="<% out.print(video.getId());%>"
+                   video_path="<% out.print(video.getVideo_up_path());%>">
                     <div class="course-card-top">
                         <img class="course-banner lazy"
                              data-original="<% out.print(video.getPic_up_path());%>"
@@ -71,6 +72,8 @@
 
         $(".open_window").click(function(){
             video_id = $(this).attr("video_id");
+            video_path = $(this).attr("video_path");
+            $("#video_sign").attr("src",video_path);
             generateFloatLayer();
         });
 

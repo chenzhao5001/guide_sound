@@ -16,6 +16,9 @@ public interface IVideo {
     @Update("update video set deleted=1 where id=#{arg0} and user_id=#{arg1}")
     void deleteVideo(int id,int userId);
 
-    @Select("select * from video where examine_status = 0")
-    List<Video> selectNotVerifyVideo();
+    @Select("select * from video where examine_status = #{arg0}")
+    List<Video> selectVideo(int status);
+
+    @Update("update video set video_show_path = #{arg1} where id = #{arg0}")
+    void setVideoShowPath(int id,String path);
 }

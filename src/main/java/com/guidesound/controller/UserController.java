@@ -152,6 +152,8 @@ public class UserController extends BaseController{
         System.out.println(currentUser);
         rep.setCode(200);
         rep.setMsg("用户退出");
+
+//        log.info("1234 info");
         return rep;
     }
 

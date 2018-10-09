@@ -26,10 +26,8 @@ public class Common implements HandlerInterceptor {
         Cookie[] cookies = request.getCookies();
         if(cookies != null) {
             for (Cookie cookie : cookies) {
-                System.out.println(cookie);
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
-                    System.out.println(token);
                     int user_id = TockenUtil.getUserIdByTocket(token);
                     User user = userService.getUserById(user_id);
                     if(user == null) {

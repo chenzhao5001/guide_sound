@@ -14,6 +14,7 @@
         content,
         pic_up_path,
         video_up_path,
+        video_temp_path,
         create_time,
         update_time
         )
@@ -24,8 +25,8 @@
         #{watch_type},
         #{content},
         #{pic_up_path},
-
         #{video_up_path},
+        #{video_temp_path},
         #{create_time},
         #{update_time}
         )

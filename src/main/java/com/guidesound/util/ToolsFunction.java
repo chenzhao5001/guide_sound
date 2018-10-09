@@ -1,5 +1,6 @@
 package com.guidesound.util;
 
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -38,6 +39,31 @@ public class ToolsFunction {
         long time = System.currentTimeMillis();
         String t = String.valueOf(time/1000);
         return t;
+    }
+
+    //执行命令
+    public static String exec(String command) throws InterruptedException {
+        String returnString = "";
+        Process pro = null;
+        Runtime runTime = Runtime.getRuntime();
+        if (runTime == null) {
+            System.err.println("Create runtime false!");
+        }
+        try {
+            pro = runTime.exec(command);
+            BufferedReader input = new BufferedReader(new InputStreamReader(pro.getInputStream()));
+            PrintWriter output = new PrintWriter(new OutputStreamWriter(pro.getOutputStream()));
+            String line;
+            while ((line = input.readLine()) != null) {
+                returnString = returnString + line + "\n";
+            }
+            input.close();
+            output.close();
+            pro.destroy();
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
+        return returnString;
     }
 
 }
