@@ -68,12 +68,13 @@ public class VideoController extends BaseController {
         String strDate = df.format(new Date());// new Date()为获取当前系统时间
 
         String savePath = multipartRequest.getServletContext().getRealPath("");
-        savePath = savePath.substring(0,savePath.lastIndexOf("webapps") + 8) + "upload";
+        System.out.println(savePath);
+        File file = new File(savePath);
+        savePath = file.getParent() + "/upload";
+//        savePath = savePath.substring(0,savePath.lastIndexOf("webapps") + 8) + "upload";
 
 
         System.out.println(savePath);
-        System.out.println("22211");
-
         File filePath = new File(savePath);
         if (!filePath.exists() && !filePath.isDirectory()) {
             filePath.mkdir();
@@ -119,7 +120,7 @@ public class VideoController extends BaseController {
         ServiceResponse rsp = new ServiceResponse();
         rsp.msg = "新增视频完成";
         rsp.code = 200;
-        rsp.data = savePath;
+        rsp.data = videoPicPath;
         return rsp;
     }
 
@@ -163,6 +164,7 @@ public class VideoController extends BaseController {
 
     @RequestMapping(value = "/set_status")
     public @ResponseBody ServiceResponse setVideoStatus(HttpServletRequest request) {
+        System.out.println("setVideoStatus");
         String id = request.getParameter("id");
         String status = request.getParameter("status");
         ServiceResponse rsp = new ServiceResponse();
