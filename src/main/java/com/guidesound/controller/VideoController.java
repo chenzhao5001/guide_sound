@@ -6,7 +6,6 @@ import com.guidesound.models.User;
 import com.guidesound.models.Video;
 import com.guidesound.util.ServiceResponse;
 import com.guidesound.util.ToolsFunction;
-import com.sun.xml.internal.ws.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -51,6 +50,7 @@ public class VideoController extends BaseController {
         MultipartFile picture = multipartRequest.getFile("picture");
         MultipartFile viedo = multipartRequest.getFile("video");
 
+
         if (
                 title == null
                         || subject == null
@@ -59,8 +59,30 @@ public class VideoController extends BaseController {
                         || picture == null
                         || content == null
                 ) {
+
             ServiceResponse rsp = new ServiceResponse();
-            rsp.msg = "缺少参数";
+            String temp= "缺少参数";
+            if(title == null) {
+                temp += " title";
+            }
+            if(subject == null) {
+                temp += " subject";
+            }
+            if(watch_type == null) {
+                temp += " watch_type";
+            }
+            if(viedo == null) {
+                temp += " viedo";
+            }
+
+            if(picture == null) {
+                temp += " picture";
+            }
+            if(content == null) {
+                temp += " content";
+            }
+
+            rsp.msg = temp;
             rsp.code = 201;
             return rsp;
         }
