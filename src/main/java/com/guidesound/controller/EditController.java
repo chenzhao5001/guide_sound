@@ -4,6 +4,8 @@ import com.guidesound.util.ServiceResponse;
 import okhttp3.*;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +32,7 @@ public class EditController {
     public Object upload(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-        MultipartFile picture = multipartRequest.getFile("upload");
+        MultipartFile picture = multipartRequest.getFile("file");
         System.out.println(picture);
         if(picture == null) {
             ServiceResponse serviceResponse = new ServiceResponse();
@@ -77,17 +79,27 @@ public class EditController {
         JSONObject json = new JSONObject(jsonString);
         String url = json.getString("data");
 
-        EditResp editResp = new EditResp();
-        editResp.setFileName(picture.getOriginalFilename());
-        editResp.setUploaded(1);
-        editResp.setUrl(url);
-        return editResp;
+        String ret = String.format("{\"default\" : \"%s\"}",url);
+
+
+        System.out.println(ret);
+
+        return ret;
     }
     @RequestMapping(value = "/browse")
     public void browse(){
     }
 
+    @RequestMapping(value = "/content")
+    public String editContent(HttpServletRequest request, ModelMap model) {
+        String ret = request.getParameter("editor1");
+        System.out.println(ret);
+        model.addAttribute("content",ret);
+        return "content";
+    }
+
 }
+
 
 class EditResp {
     String fileName;
